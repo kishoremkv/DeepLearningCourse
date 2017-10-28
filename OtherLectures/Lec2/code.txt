@@ -1,0 +1,103 @@
+Nearest Neighbour
+
+Xtr, Ytr, Xte, Yte = load_CIFAR10('data/cifar10/') # a magic function we provide
+# flatten out all images to be one-dimensional
+Xtr_rows = Xtr.reshape(Xtr.shape[0], 32 * 32 * 3) # Xtr_rows becomes 50000 x 3072
+Xte_rows = Xte.reshape(Xte.shape[0], 32 * 32 * 3) # Xte_rows becomes 10000 x 3072
+
+nn = NearestNeighbor() 
+nn.train(Xtr_rows, Ytr) 
+Yte_predict = nn.predict(Xte_rows) 
+print 'accuracy: %f' % ( np.mean(Yte_predict == Yte) )  #Note how to print in python
+
+import numpy as np
+
+class NearestNeighbor(object):          
+  def __init__(self):
+    pass
+
+  def train(self, X, y):
+    # X is N x D where each row is an example. Y is 1-dimension of size N 
+    self.Xtr = X
+    self.ytr = y
+
+  def predict(self, X):
+    num_test = X.shape[0]
+    Ypred = np.zeros(num_test, dtype = self.ytr.dtype)
+
+    for i in xrange(num_test):
+      distances = np.sum(np.abs(self.Xtr - X[i,:]), axis = 1)
+      min_index = np.argmin(distances) # get the index with smallest distance
+      Ypred[i] = self.ytr[min_index] # predict the label of the nearest example
+
+    return Ypred
+	
+NOTE : In K Nearest Neighbour we first find k closest classes for image. 
+Out of those k we see which class has occured most frequently. :P 
+
+__________________________________________________________________________________________________________________________
+
+Multiclass Support Vector Machine (SVM) loss. 
+The SVM loss is set up so that the SVM “wants” the correct class for each image to 
+have a score higher than the incorrect classes by some fixed margin ??.
+
+For example, the score for the j-th class is : sj = f(xi,W)j out of 10 classes
+Let this is score of ith train example whose correct class is yi
+
+Loss = Sigma( j != yi)  max( sj - syi + delta , 0 )  #losses if type max(0,"") are called hinge loss , avg this over all train data 
+
+if syi is bigger than or equal to  sj by delta i.e. (sj - syi will be negative and mag >= delta) then loss is zeros
+
+Def L_i_vectorized(x,y,W)
+  """
+  A faster half-vectorized implementation. half-vectorized
+  refers to the fact that for a single example the implementation contains
+  no for loops, but there is still one loop over the examples (outside this function)
+  """
+  delta = 1.0
+  scores = W.dot(x)
+  # compute the margins for all classes in one vector operation
+  margins = np.maximum(0, scores - scores[y] + delta)
+  # on y-th position scores[y] - scores[y] canceled and gave delta. We want
+  # to ignore the y-th position and only consider margin on max wrong class
+  margins[y] = 0
+  loss_i = np.sum(margins)
+  return loss_i
+  
+IMPORTANCE OF REGULARISATION
+Regularization. There is one bug with the loss function we presented above. 
+Suppose that we have a dataset and a set of parameters W that correctly classify every example 
+(i.e. all scores are so that all the margins are met, and Li=0Li=0 for all i). 
+The issue is that this set of W is not necessarily unique: there might be many similar W that correctly classify the examples. 
+One easy way to see this is that if some parameters W correctly classify all examples (so loss is zero for each example), 
+then any multiple of these parameters lamda W where lamda >1 will also give zero loss 
+because this transformation uniformly stretches all score magnitudes and hence also their absolute differences. 
+For example, if the difference in scores between a correct class and a nearest incorrect class was 15, 
+then multiplying all elements of W by 2 would make the new difference 30.
+
+In other words, we wish to encode some preference for a certain set of weights W over others to remove this ambiguity.
+We can do so by extending the loss function with a regularization penalty R(W). 
+The most common regularization penalty is the L2 norm that discourages large weights 
+through an elementwise quadratic penalty over all parameters:
+
+WHAT IS CROSS VALIDATION 
+In k-fold cross-validation, the original sample is randomly partitioned into k equal size subsamples. 
+Of the k subsamples, a single subsample is retained as the validation data for testing the model, 
+and the remaining k-1 subsamples are used as training data. 
+The cross-validation process is then repeated k times (the folds), 
+with each of the k subsamples used exactly once as the validation data. 
+The k results from the folds can then be averaged (or otherwise combined) to produce a single estimation. 
+The advantage of this method is that all observations are used for both training and validation, 
+and each observation is used for validation exactly once.
+
+BINARY SVM
+If yi = 1 then WTxi must be very close to 1 (1 - yiWTxi ~~ 0)
+If yi = -1 then WTxi must be very close to -1  (1 - yiWTxi ~~0)  #Note that max loss per eg here is 2 
+Loss =  C max (0, 1 - yi WT xi ) + R(W)   #Note C  plays role of 1/lambda
+
+
+
+
+
+	
+_______________________________________________________________________________________________________________________

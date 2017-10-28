@@ -1,0 +1,37 @@
+POINTS TO NOTE
+# Bayes Classifier is best of all the classifiers. But probability distribution is not available.
+# Nearest Neighbour is at max twice Bayes Classifier
+
+NAIVE BAYES CLASSIFICATION
+# Lkj actual class k , predicted j
+# P(x / Wj) =  
+
+PLR: Perceptron Learning Rule
+# Perceptron : Neuron before activation function
+
+NEURAL NETWORKS
+# 2nd layer learns intersection of areas created by lines of first layer
+# Superimposes individual fns of prev layer. For eg fourier series superimpose sinusoids to form arbitrary functions
+# If weights are not initialzed randomly/differently , all neurons start behaving same way.
+# Growth Function : complexity of my estimator grows so rapidly with number of dimensions. Linear preffered.
+# The growth function of neural network is one of the best growth function of any other estimator.
+# In sinusoids and polynomials this thing fails.
+# Single hidden layered network is able to approximate any function. (Except functions with inf discontinuity).
+# The middle layer basically projects the input data to a sufficiently high dimensional space so that a linear boundary can 
+  be learned by the final layer.
+# Sigmoid function : transendental function. Exponential taylor series has infinite terms. So single sigmoid neuron project input 
+  into infinite dimensional space.
+# Cover's Theorem : Any data can be projected into a space where its linearly separable with prob-> 1 on inc dimensions.
+
+AVERAGE CASE ANALYSIS / BIAS-VARIANCE DECOMPOSITION
+# Everything is not pack learnable. That is in worst case nothing is learnable.
+# SVM is the tool to do worst case analysis.
+# The VC dimension measures the worst case performance of the estimator.
+# VC dimension reduction is done to reduce overfitting capability of network. If we shatter all K points => overfitting.
+# Bias can be decreased with inc  in complexity of model , while variance decreases.
+# Always interpret error in terms of bias and variance.
+# On inc hidden neurons bias is decresed and variance is increased.
+# In order to produce discontinuity we need many sigmoids superimposition. 
+# Single hidden layer is sufficient but it might be difficult to realize. 
+# RBU training , restricted moltzmann training is another reason.
+

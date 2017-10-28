@@ -1,0 +1,20 @@
+#Reference http://iitd.info/hpccaffe
+
+#ssh cs1140565@hpc.iitd.ac.in 
+you are on one of cpu login nodes
+#hostname
+login into gpu login node
+#ssh gpulogin01
+# hostname
+# cd scratch caffe
+# cd examples
+# cd mnist
+# less lenet_train_test.prototext
+# less lenet_solver.prototxt
+# less train_lenet.sh
+# module load apps/caffe
+# ./train_lenet.sh
+
+How to submit jobs
+#
+#
